@@ -54,8 +54,8 @@ aiosqlite
 #    resolver pick a mutually compatible set instead of you pinning
 #    versions by hand and hitting conflicts later.
 #
-# 2. Two generations of Gemini integration are used on purpose, because
-#    the scripts show both. The first four scripts import from
+# 2. Two generations of Gemini integration are used across the scripts.
+#    The first four scripts import from
 #    `llama_index.llms.gemini` / `llama_index.embeddings.gemini`, which
 #    sit on the older `google-generativeai` SDK (importing it prints a
 #    FutureWarning that support for that SDK has ended). The last two
