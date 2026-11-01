@@ -1,0 +1,81 @@
+# --- Environment utilities ---
+python-dotenv
+
+# --- LlamaIndex core & integrations ---
+llama-index-core
+llama-index-vector-stores-chroma
+# Older Gemini integration (used by llama-basic.py, llama-next-storage-chunking.py,
+# llama-advance-chroma-db.py, llama-chat-engine.py)
+llama-index-llms-gemini
+llama-index-embeddings-gemini
+# Newer Google GenAI integration (used by llama-agentic.py and llama-react.py)
+llama-index-llms-google-genai
+llama-index-embeddings-google-genai
+
+# --- Vector database ---
+chromadb
+
+# --- Gemini SDKs (internal needs of the integrations above) ---
+# google-generativeai backs the older Gemini integration, google-genai backs the newer one.
+google-generativeai
+google-genai
+
+# --- Chunking tokenizer (internal need of SentenceSplitter) ---
+# Used to count tokens for chunk_size=512 / chunk_overlap=50.
+tiktoken
+
+# --- Reranking (cross-encoder, used by the two agent scripts) ---
+# SentenceTransformerRerank needs sentence-transformers, which runs on PyTorch.
+sentence-transformers
+torch
+
+# --- Chat memory engine (internal need of Memory) ---
+# Memory keeps chat history through an async SQLAlchemy engine. Without a database URI
+# (as in llama-agentic.py and llama-react.py), it uses an in-process SQLite database via aiosqlite.
+sqlalchemy[asyncio]
+aiosqlite
+
+# --- OPTIONAL: other document formats ---
+# SimpleDirectoryReader reads .txt and .md files by itself. For PDF, DOCX and similar formats
+# it needs this package, otherwise it warns and reads those files as raw text.
+# llama-index-readers-file
+
+# --- OPTIONAL: server-based memory (see "Moving to Server-Based Storage" in the README) ---
+# Not needed by the six scripts as they are. Uncomment to use PostgreSQL-backed memory.
+# asyncpg
+
+# ------------------------------------------------------------------
+# NOTES (read before you `pip install`):
+#
+# 1. Install everything in ONE `pip install -r requirements.txt` call
+#    inside a clean virtual environment. The LlamaIndex ecosystem is
+#    split into many fast-moving sub-packages (llama-index-core +
+#    integration packages), and installing them together lets pip's
+#    resolver pick a mutually compatible set instead of you pinning
+#    versions by hand and hitting conflicts later.
+#
+# 2. Two generations of Gemini integration are used on purpose, because
+#    the scripts show both. The first four scripts import from
+#    `llama_index.llms.gemini` / `llama_index.embeddings.gemini`, which
+#    sit on the older `google-generativeai` SDK (importing it prints a
+#    FutureWarning that support for that SDK has ended). The last two
+#    scripts import from `llama_index.llms.google_genai` /
+#    `llama_index.embeddings.google_genai`. If you only run the last two
+#    scripts, you can drop the two older integrations and
+#    `google-generativeai`.
+#
+# 3. `sentence-transformers` pulls in PyTorch. On the first run of the
+#    two agent scripts, the cross-encoder weights
+#    (`cross-encoder/ms-marco-MiniLM-L-2-v2`) are downloaded from
+#    Hugging Face, so an internet connection is needed at that point.
+#    If you only have a CPU, you can install the CPU build of PyTorch
+#    first to keep the install smaller.
+#
+# 4. `Memory`, `FunctionAgent`, and `ReActAgent` come from recent
+#    versions of `llama-index-core`. If you hit an ImportError on
+#    `llama_index.core.memory` or `llama_index.core.agent.workflow`,
+#    upgrade with: `pip install --upgrade llama-index-core`
+#
+# 5. Everything installs from PyPI. No system binaries and no
+#    git-based installs are needed.
+# ------------------------------------------------------------------
